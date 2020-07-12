@@ -104,7 +104,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'meiduo_mis_db',
-        'HOST': '192.168.203.161',
+        'HOST': '127.0.0.1',
         'USER': 'root',
         'PASSWORD': 'mysql',
         'PORT': 3306
@@ -168,35 +168,35 @@ STATIC_URL = '/static/'
 CACHES = {
     "default": { # 默认存储信息: 存到 0 号库
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://192.168.203.161:6379/0",
+        "LOCATION": "redis://127.0.0.1:6379/0",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
     },
     "session": { # session 信息: 存到 1 号库
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://192.168.203.161:6379/1",
+        "LOCATION": "redis://127.0.0.1:6379/1",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
     },
     "verify_code": { # session 信息: 存到 1 号库
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://192.168.203.161:6379/2",
+        "LOCATION": "redis://127.0.0.1:6379/2",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
     },
     "history": { # 存放用户浏览历史记录
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://192.168.203.161:6379/3",
+        "LOCATION": "redis://127.0.0.1:6379/3",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
     },
     "carts": { # 存放用户浏览历史记录
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://192.168.203.161:6379/4",
+        "LOCATION": "redis://127.0.0.1:6379/4",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
@@ -292,12 +292,13 @@ EMAIL_HOST = 'smtp.163.com'
 # 端口号
 EMAIL_PORT = 25
 # 下面的内容是可变的, 随后台设置的不同而改变:
+# 下面的内容是可变的, 随后台设置的不同而改变:
 # 发送邮件的邮箱
-EMAIL_HOST_USER = 'itcast_weiwei@163.com'
+EMAIL_HOST_USER = 'itcast888888@163.com'
 # 在邮箱中设置的客户端授权密码
-EMAIL_HOST_PASSWORD = 'OQSKSEISPZVTHEMK'
+EMAIL_HOST_PASSWORD = 'PKOERMBXJFOLXPCB'
 # 收件人看到的发件人
-EMAIL_FROM = '美多商城<itcast_weiwei@163.com>'
+EMAIL_FROM = '煤55老板<itcast888888@163.com>'
 # 邮箱验证链接
 EMAIL_VERIFY_URL = 'http://www.meiduo.site:8080/success_verify_email.html?token='
 
@@ -308,10 +309,11 @@ DEFAULT_FILE_STORAGE = "meiduo_mall.utils.fastdfs.fastdfs_storage.FastDFSStorage
 # 自定义fdfs文件存储服务器的域名
 FDFS_URL = "http://image.meiduo.site:8888/"
 
-
-# 自定义静态文件保存的根目录
-GENERATED_STATIC_HTML_DIR = os.path.join(os.path.dirname(os.path.dirname(BASE_DIR)), 'front_end_pc')
-
+# 生成的静态 html 文件保存目录
+# 先获取 BASE_DIR 的绝对路径: 即 内层 meiduo_mall 的绝对路径
+# 然后截取最后一级, 即,获取父类的绝对路径.
+# 再截取一级, 拿到项目文件的绝对路径, 然后拼接上 'front_end_pc'
+GENERATED_STATIC_HTML_FILES_DIR = os.path.join(os.path.dirname(os.path.dirname(BASE_DIR)), 'front_end_pc')
 
 # 定时任务django_crontab的配置项
 CRONJOBS = [
@@ -321,13 +323,18 @@ CRONJOBS = [
      '>> ' + os.path.join(BASE_DIR, 'logs/crontab.log')
     ), # 一个任务
 ]
+# 解决 crontab 中文问题
+CRONTAB_COMMAND_PREFIX = 'LANG_ALL=zh_cn.UTF-8'
+
+# 自定义静态文件保存的根目录
+GENERATED_STATIC_HTML_DIR = os.path.join(os.path.dirname(os.path.dirname(BASE_DIR)), 'front_end_pc')
 
 
 # 指定es搜索服务位置
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
-        'URL': 'http://192.168.203.161:9200/', # Elasticsearch服务器ip地址，端口号固定为9200
+        'URL': 'http://127.0.0.1:9200/', # Elasticsearch服务器ip地址，端口号固定为9200
         'INDEX_NAME': 'meiduo_mall', # Elasticsearch建立的索引库的名称
     },
 }
@@ -342,12 +349,11 @@ HAYSTACK_SEARCH_RESULTS_PER_PAGE = 5
 
 
 # 应用的id，此处开发阶段写沙盒应用的id
-ALIPAY_APPID = '2016091600526851'
+ALIPAY_APPID = '2016102600763145'
 ALIPAY_DEBUG = True
 # 此处是沙箱url，上线之后修改为线上app的支付链接
 ALIPAY_URL = 'https://openapi.alipaydev.com/gateway.do'
 ALIPAY_RETURN_URL = "http://www.meiduo.site:8080/pay_success.html"
-
 
 # DRF配置
 REST_FRAMEWORK = {
